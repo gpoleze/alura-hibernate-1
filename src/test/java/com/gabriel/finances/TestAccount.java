@@ -1,6 +1,7 @@
 package com.gabriel.finances;
 
 import com.gabriel.finances.model.Account;
+import com.gabriel.finances.util.JPAUtil;
 import org.junit.Test;
 
 import javax.persistence.EntityManager;
@@ -18,15 +19,13 @@ public class TestAccount {
         account.setBranchNumber("123");
         account.setNumber("456");
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("finances");
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = new JPAUtil().getEntityManager();
 
         em.getTransaction().begin();
         em.persist(account);
         em.getTransaction().commit();
 
         em.close();
-        emf.close();
 
 
     }
