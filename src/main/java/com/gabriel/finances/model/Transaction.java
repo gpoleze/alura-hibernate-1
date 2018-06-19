@@ -3,12 +3,13 @@ package com.gabriel.finances.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false)
     private Integer id;
 
     @Column
@@ -26,6 +27,17 @@ public class Transaction {
 
     @ManyToOne
     private Account account;
+
+    @ManyToMany
+    private List<Category> category;
+
+    public List<Category> getCategory() {
+        return category;
+    }
+
+    public void setCategory(List<Category> category) {
+        this.category = category;
+    }
 
     public Account getAccount() {
         return account;
