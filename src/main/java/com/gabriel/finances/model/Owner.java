@@ -1,7 +1,6 @@
 package com.gabriel.finances.model;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 public class Owner {
@@ -19,8 +18,17 @@ public class Owner {
     @Column(nullable = false)
     private String address;
 
+    @JoinColumn(unique = true)
     @OneToOne
     private Account account;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
     public Integer getId() {
         return id;
