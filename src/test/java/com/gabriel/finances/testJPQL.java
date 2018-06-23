@@ -63,4 +63,49 @@ class testJPQL extends BaseTest {
 
         em.getTransaction().commit();
     }
+
+    @Test
+    void testBidirectionalRelatioshipAccountAntTransactions() {
+        em.getTransaction().begin();
+
+        Transaction transaction = em.find(Transaction.class, 4);
+        Account account = transaction.getAccount();
+        System.out.println(account.getOwner());
+
+        System.out.println(account.getTransactions().size());
+        account.getTransactions().forEach(System.out::println);
+
+    }
+
+    @Test
+    void testReportWithAllTransactions() {
+        em.getTransaction().begin();
+
+        String jpql = "SELECT a FROM Account a JOIN FETCH a.transactions";
+        Query query = em.createQuery(jpql);
+
+
+        List<Account> accounts = query.getResultList();
+
+        accounts.forEach(account -> {
+            System.out.println("Onwer:\t" + account.getOwner());
+            System.out.println("Transaction:\t" + account.getTransactions());
+        });
+    }
+
+    @Test
+    void testReportWithAllTransactionsUsingALeftJoin() {
+        String jpql = "SELECT DISTINCT a FROM Account a LEFT JOIN FETCH a.transactions";
+        Query query = em.createQuery(jpql);
+
+
+        List<Account> accounts = query.getResultList();
+
+        accounts.forEach(account -> {
+            System.out.println("\n----------------");
+            System.out.println("Onwer:\t" + account.getOwner());
+            System.out.println("Transaction:\t" + account.getTransactions());
+            System.out.println("----------------\n");
+        });
+    }
 }
