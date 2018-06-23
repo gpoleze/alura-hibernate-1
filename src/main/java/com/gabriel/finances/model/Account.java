@@ -1,9 +1,7 @@
 package com.gabriel.finances.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 //Esta anotacao faz com que o Hibernate cuide desta classe como uma tabela do banco de dados, o que é chamado de entidade
@@ -17,6 +15,9 @@ public class Account {
     private String number;
     private String bank;
     private String branchNumber;
+
+    @OneToMany(mappedBy = "account")
+    private List<Transaction> transactions;
 
     public Integer getId() {
         return id;
@@ -56,5 +57,13 @@ public class Account {
 
     public void setBranchNumber(String branchNumber) {
         this.branchNumber = branchNumber;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
