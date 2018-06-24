@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@NamedQuery(query = "SELECT DISTINCT AVG(t.value) FROM Transaction t WHERE t.account = :pAccount AND t.type = :pType GROUP BY t.date", name = "AveragesByDayAndType")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

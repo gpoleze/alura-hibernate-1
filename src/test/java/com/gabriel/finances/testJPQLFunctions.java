@@ -6,6 +6,7 @@ import com.gabriel.finances.model.TransactionType;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -47,6 +48,29 @@ class testJPQLFunctions extends BaseTest {
         TransactionDao dao = new TransactionDao(em);
 
         List<Double> averages = dao.getAvergesByDayAndType(TransactionType.OUT, account);
+
+        System.out.println("\n\n------------RESULTS------------");
+        averages.forEach(avg -> System.out.println("The dayly average is:" + avg));
+        System.out.println("---------END OF RESULTS---------\n\n");
+
+        em.getTransaction().commit();
+
+    }
+
+    @Test
+    void testingAverageOfValuesPerDayUsingANamesQuery() {
+
+        em.getTransaction().begin();
+
+        Account account = new Account();
+        account.setId(2);
+
+        TypedQuery<Double> typedQuery = em.createNamedQuery("AveragesByDayAndType", Double.class);
+
+        typedQuery.setParameter("pAccount",account);
+        typedQuery.setParameter("pType",TransactionType.OUT);
+
+        List<Double> averages = typedQuery.getResultList();
 
         System.out.println("\n\n------------RESULTS------------");
         averages.forEach(avg -> System.out.println("The dayly average is:" + avg));
