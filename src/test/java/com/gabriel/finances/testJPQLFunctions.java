@@ -1,11 +1,11 @@
 package com.gabriel.finances;
 
+import com.gabriel.finances.dao.TransactionDao;
 import com.gabriel.finances.model.Account;
 import com.gabriel.finances.model.TransactionType;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -43,18 +43,13 @@ class testJPQLFunctions extends BaseTest {
         Account account = new Account();
         account.setId(2);
 
-        String jpql = "SELECT DISTINCT AVG(t.value) FROM Transaction t WHERE t.account = :pAccount " +
-                "AND t.type = :pType " +
-                "GROUP BY t.date";
 
-        TypedQuery<Double> query = em.createQuery(jpql, Double.class);
-        query.setParameter("pAccount", account);
-        query.setParameter("pType", TransactionType.OUT);
+        TransactionDao dao = new TransactionDao(em);
 
-        List<Double> averages = query.getResultList();
+        List<Double> averages = dao.getAvergesByDayAndType(TransactionType.OUT, account);
 
         System.out.println("\n\n------------RESULTS------------");
-        averages.forEach(avg->System.out.println("The dayly average is:" + avg));
+        averages.forEach(avg -> System.out.println("The dayly average is:" + avg));
         System.out.println("---------END OF RESULTS---------\n\n");
 
         em.getTransaction().commit();
